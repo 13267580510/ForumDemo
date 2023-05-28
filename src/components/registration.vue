@@ -49,11 +49,16 @@
         <a-button type="primary" html-type="submit">Submit</a-button>
       </a-form-item>
 
+      <a-form-item  :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button v-if="ResStatus" type="primary" html-type="submit">Submit</a-button>
+      </a-form-item>
+
     </a-form>
   </template>
-  <script lang="ts">
+
+<script lang="ts">
 const axios = require('axios');
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
   
   interface FormState {
     username: string;
@@ -72,6 +77,8 @@ import { defineComponent, reactive } from 'vue';
         remember: true,
       });
 
+      const ResStatus =   ref(false);
+
       const BaseUrl = 'api/users/register'
       const onFinish = (values: any) => {
         
@@ -83,17 +90,26 @@ import { defineComponent, reactive } from 'vue';
         })
         .then(function (response:any) {
           console.log(response);
+    
         })
         .catch(function (error:any) {
-          console.log(error);
+          onFinishFailed(error);        
         });
       };
   
       const onFinishFailed = (errorInfo: any) => {
+        ResStatus.value = ! ResStatus.value
+        console.log("ResStatus:",ResStatus.value);  
         console.log('Failed:', errorInfo);
       };
+      
+      onMounted(()=>{
+        console.log("ResStatus:",ResStatus.value);
+      })
+
       return {
         formState,
+        ResStatus:ResStatus.value,
         onFinish,
         onFinishFailed,
       };

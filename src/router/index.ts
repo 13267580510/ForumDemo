@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import Registration from '../views/registration.vue'
-import FindeOne from '../views/FindOne.vue'
+import Registration from '../components/registration.vue'
+import FindeOne from '../components/FindOne.vue'
+import Login from '../components/login.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -14,6 +15,9 @@ const routes: Array<RouteRecordRaw> = [
       },{
       path:'FindOne',
       component:FindeOne
+    },{
+      path:'Login',
+      component:Login
     }]
   }
 ];

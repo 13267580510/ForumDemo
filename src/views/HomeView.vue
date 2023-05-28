@@ -28,9 +28,9 @@
                 subnav 1
               </span>
             </template>
-            <router-link to="/registration"><a-menu-item key="1">option1</a-menu-item></router-link>
-            <router-link to="/FindOne"><a-menu-item key="2">option2</a-menu-item></router-link>
-            <a-menu-item key="3">option3</a-menu-item>
+            <router-link to="/registration"><a-menu-item key="1">注册</a-menu-item></router-link>
+            <router-link to="/FindOne"><a-menu-item key="2">查找</a-menu-item></router-link>
+            <router-link to="/Login"> <a-menu-item key="3">登录</a-menu-item></router-link>
             <a-menu-item key="4">option4</a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub2">
@@ -77,7 +77,7 @@
 <script>
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons-vue';
 import { defineComponent, ref } from 'vue';
-import registration from './registration.vue'
+import registration from '../components/registration.vue'
 export default defineComponent({
   components: {
     UserOutlined,
