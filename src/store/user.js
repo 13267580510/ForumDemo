@@ -1,12 +1,12 @@
 import {defineStore} from "pinia";
-import {userService} from "../http/UserService";
 
 export const useUserStore = defineStore('user', {
     state() {
         return {
-            satoken: '',
-            loginId: '',
+            satoken: '',//权限
+            status: '',//登录状态
             profile: {
+                UID:"",
                 username: '',
                 nickname: '',
                 avatar: '',
@@ -15,10 +15,10 @@ export const useUserStore = defineStore('user', {
         }
     },
     actions: {
-        setToken(value: string) {
+        setToken(value) {
             this.satoken = value
         },
-        setLoginId(value: string){
+        setLoginId(value){
             this.loginId = value
         },
         loadProfile(){

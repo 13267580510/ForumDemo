@@ -25,11 +25,11 @@
       </a-form-item>
 
       <a-form-item
-        label="pickname"
-        name="pickname"
-        :rules="[{ required: true, message: 'Please input your pickname!' }]"
+        label="nickname"
+        name="nickname"
+        :rules="[{ required: true, message: 'Please input your nickname!' }]"
       >
-        <a-input-password v-model:value="formState.pickname" />
+        <a-input-password v-model:value="formState.nickname" />
       </a-form-item>
 
       <a-form-item
@@ -63,7 +63,7 @@ import { defineComponent, onMounted, reactive, ref } from 'vue';
   interface FormState {
     username: string;
     password: string;
-    pickname:string;
+    nickname:string;
     avatar:string;
     remember: boolean;
   }
@@ -72,7 +72,7 @@ import { defineComponent, onMounted, reactive, ref } from 'vue';
       const formState = reactive<FormState>({
         username: '',
         password: '',
-        pickname:'',
+        nickname:'',
         avatar:'',
         remember: true,
       });
@@ -85,7 +85,7 @@ import { defineComponent, onMounted, reactive, ref } from 'vue';
         axios.post(BaseUrl, {
           username: formState.username,
           password: formState.password,
-          pickname: formState.pickname,
+          nickname: formState.nickname,
           avatar: formState.avatar
         })
         .then(function (response:any) {

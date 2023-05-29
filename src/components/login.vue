@@ -3,7 +3,7 @@
     <div>
         <div>
             <span>账号</span>
-            <a-input v-model:value="UserInfo.Account" placeholder="Basic usage" />
+            <a-input v-model:value="UserInfo.UserName" placeholder="Basic usage" />
         </div>
         <div>
             <span>密码</span>
@@ -19,24 +19,36 @@
 
 <script setup>
 import { defineComponent, reactive, ref } from 'vue';
+import {useUserStore}  from '../store/user'
 const UserInfo = reactive({
     //账号
-    Account:null,
+    UserName:null,
     Password:null
 });
 
 const axios = require('axios');
 
+const UserStore= useUserStore();
+
 const commit=()=>{
-    console.log("账号"+UserInfo.Account);
-    console.log("密码"+UserInfo.Password);
     const BaseUrl = 'api/users/login';
     axios.post(BaseUrl,UserInfo)
-        .then((response)=>{
-          console.log(response);
-    
+        .then(res=>{
+          if(res.data.code==200){
+            console.log("个人信息:",res.data.data);
+            const data = res.data.data;
+            UserStore.satoken = data.satoken;
+            UserStore.status = data.status;
+            UserStore.profile = {...data.profile}
+            axios.post('api/users/UpdateStatus',{
+              UID:UserStore.profile.UID,
+              status:true
+            })
+          }else{
+            console.log("登录失败：",res.data.data);
+          }
         })
-        .catch((error)=>{
+        .catch(error=>{
           console.log(error);        
         });
     
