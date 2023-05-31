@@ -18,6 +18,18 @@ export const useUserStore = defineStore('user', {
         setToken(value) {
             this.satoken = value
         },
+<<<<<<< HEAD
+=======
+        setLoginId(value){
+            this.loginId = value
+        },
+        loadProfile(){
+            userService.findOne(this.loginId).then(({data})=>{
+                console.log('个人信息: ', data)
+                this.profile = {...data.data}
+            })
+        }
+>>>>>>> e7649e8d968df6fc3b738911b6ef33d0d39541de
     },
     persist: {
         enabled: true

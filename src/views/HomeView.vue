@@ -25,7 +25,11 @@
             <template #title>
               <span>
                 <user-outlined />
+<<<<<<< HEAD
                 用户登录注册
+=======
+                subnav 1
+>>>>>>> e7649e8d968df6fc3b738911b6ef33d0d39541de
               </span>
             </template>
             <router-link to="/registration"><a-menu-item key="1">注册</a-menu-item></router-link>
@@ -37,11 +41,19 @@
             <template #title>
               <span>
                 <laptop-outlined />
+<<<<<<< HEAD
                 Q&A
               </span>
             </template>
             <router-link to="/AddIssue"><a-menu-item key="5">新增问题</a-menu-item></router-link> 
             <router-link to="/ListIssue"><a-menu-item key="6">问题列表</a-menu-item></router-link>
+=======
+                subnav 2
+              </span>
+            </template>
+            <a-menu-item key="5">option5</a-menu-item>
+            <a-menu-item key="6">option6</a-menu-item>
+>>>>>>> e7649e8d968df6fc3b738911b6ef33d0d39541de
             <a-menu-item key="7">option7</a-menu-item>
             <a-menu-item key="8">option8</a-menu-item>
           </a-sub-menu>

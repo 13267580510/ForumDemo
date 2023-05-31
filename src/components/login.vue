@@ -37,12 +37,18 @@ const commit=()=>{
           if(res.data.code==200){
             console.log("个人信息:",res.data.data);
             const data = res.data.data;
+<<<<<<< HEAD
             //更新用户仓库
             UserStore.setToken(data.satoken);
             UserStore.status = data.status;
             UserStore.profile = {...data.profile}
 
             console.log('用户仓库已更改：',UserStore.profile);
+=======
+            UserStore.satoken = data.satoken;
+            UserStore.status = data.status;
+            UserStore.profile = {...data.profile}
+>>>>>>> e7649e8d968df6fc3b738911b6ef33d0d39541de
             axios.post('api/users/UpdateStatus',{
               UID:UserStore.profile.UID,
               status:true

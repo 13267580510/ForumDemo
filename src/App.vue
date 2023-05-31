@@ -7,11 +7,16 @@
 
 <script setup>
 import axios from 'axios';
+<<<<<<< HEAD
 import {onMounted} from 'vue';
+=======
+import {unmounted} from 'vue';
+>>>>>>> e7649e8d968df6fc3b738911b6ef33d0d39541de
 import {useUserStore}  from './store/user'
 
 const UserStore = useUserStore();
 
+<<<<<<< HEAD
 onMounted(()=>{
   window.addEventListener("beforeunload", async (event) => {
   event.preventDefault(); // 阻止默认的页面关闭行为
@@ -44,6 +49,20 @@ onMounted(()=>{
 // });
 })
 
+=======
+unmounted(()=>{
+  console.log('开始监听');
+  window.addEventListener('beforeunload', sendPostRequest);
+})
+
+const sendPostRequest = ()=>{
+  axios.post('api/users/UpdateStatus',{
+              UID:UserStore.profile.UID,
+              status:false
+            })
+}
+
+>>>>>>> e7649e8d968df6fc3b738911b6ef33d0d39541de
 </script>
 <style lang="scss">
 #app {
