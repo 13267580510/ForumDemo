@@ -37,17 +37,15 @@ import axios from 'axios';
     title: '',
     content: '',
     category: '',
-    author: UserStore.profile.UID,
+    author: UserStore.profile.username,
+    UID:UserStore.profile.UID
   });
   
   const onSubmit = async () => {
   const baseURL='api/issue/addIssue'
     axios.post(baseURL,formState)
      .then(res=>{
-      console.log('res:',success);
       IssueStore.IssueList.push(res.data);
-      console.log(res.data);
-      console.log('IssueStore.IssueList:',IssueStore.IssueList);
      })
      .catch(err=>{
         console.log(err);
