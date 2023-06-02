@@ -5,8 +5,9 @@
     <span>时间:{{ IssueData.createTime }}</span><br>
     <span>作者:{{ IssueData.author }}</span>
   </div>
-  <addComment :_id="IssueData._id"></addComment>
-  <commentList></commentList>
+  <addComment :_id="IssueData._id" @addCommentData="addCommentData"></addComment>
+
+  <commentList v-for="item in  commentData" :key=item :item="item" @getComment="getComment"></commentList>
 </template>
 
 <script setup>
@@ -54,10 +55,35 @@ onBeforeMount(async ()=>{
 
                     IssueData.createTime = formattedDate
                     console.log('IssueData:',IssueData);
+                    getComment();
+                  })
+                  .catch(err=>{
+                    console.log('err:',err);
                   })
 })
 
+//定义该问题下的评论数据格式
+const  commentData = reactive([]);
 
+
+//获取评论数据
+const getComment = async () =>{
+  await axios.post('api/comment/getComment',{issueID:IssueData._id})
+            .then(res=>{
+              console.log('接收到请求所有评论数据的返回:',res);
+              for(let i=0;i<res.data.length;i++){
+                  commentData[i]=res.data[i];
+              }
+              console.log('commentData:',commentData);
+            })
+}
+
+//增加并刷新评论列表
+const addCommentData = (item) =>{
+  console.log('有新的评论:',item);
+  commentData.push(item);
+  console.log('commentData:',commentData);
+}
 
 
 

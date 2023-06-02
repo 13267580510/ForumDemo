@@ -1,5 +1,8 @@
 <template>
-    <a-comment :item="CommentDetail">
+  <a-comment>
+    123123
+  </a-comment>
+<!-- <a-comment :item="CommentDetail">
       <template #actions>
         <span key="comment-basic-like">
           <a-tooltip title="Like">
@@ -17,22 +20,10 @@
             {{ item.dislikes }}
           </span>
         </span>
+        <span key="comment-basic-reply-to">回复</span>
         
-        <div >
-          <div>
-            <span @click="showModal" style="cursor: pointer">回复</span>
-            <a-modal v-model:open="open" title="回复" @ok="handleOk">
-              <a-textarea :rows="4" placeholder="这里不是祖安，请友好交流" :maxlength="6" />
-            </a-modal>
-          </div>
-        </div>
-
-        <!-- 回复框 -->
-        
-
-        <!-- 删除按钮 -->
         <span key="comment-basic-outlined">
-          <!-- <more-outlined /> -->
+     
             <a-dropdown>
               <a class="ant-dropdown-link" @click.prevent>
                   <more-outlined />
@@ -45,7 +36,6 @@
             </a-dropdown>
 
         </span>
-        
         
       </template>
 
@@ -64,60 +54,23 @@
         </a-tooltip>
       </template>
 
-      <!-- 二级评论组件 -->
-      
-      <commentChild v-for="item in item.replies"></commentChild>
-    </a-comment>
-  </template>
+</a-comment> -->
+</template>
+
 <script setup>
 import {LikeFilled,LikeOutlined,DislikeFilled,DislikeOutlined,MoreOutlined} from '@ant-design/icons-vue'
-import {onBeforeMount,defineProps, reactive,defineEmits,ref} from 'vue'
+import {onBeforeMount,defineProps, reactive,defineEmits} from 'vue'
 import dayjs from "dayjs";
 import axios from 'axios';
 import { useUserStore } from '@/store/user';
-import commentChild from './commentChild/commentChild.vue'
+
 import 'dayjs/locale/zh-cn'
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime)
 
 const props = defineProps({item:Object});
-const CommentDetail = reactive(props.item)
-const UserStore = useUserStore();
-const emit = defineEmits(['getComment']);
 
-onBeforeMount(()=>{
-  console.log('接收到评论列表数据：',CommentDetail);
-  })
+console.log('CommentChild:',props.item);
 
-const handleOk = e => {
-  console.log(e);
-  open.value = false;
-};
-
-const open = ref(false);
-const showModal = () => {
-  open.value = true;
-};
-
-
-//删除该评论
-const deleteComment = async (item)=>{
-  await console.log('要删除的评论ID：',item);
-  axios.post('api/comment/deleteComment',{item,UID:UserStore.profile.UID})
-            .then(res=>{
-              console.log('删除评论res:',res);
-              emit('getComment');
-            })
-            .catch(err=>{
-              console.log('err:',err);
-            })
-}
-
-
-
-//添加二级评论
-const addCommentChild = async (item)=>{
-  console.log('收到创建二级评论请求：',item);
-}
 </script>

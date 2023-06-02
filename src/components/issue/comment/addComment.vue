@@ -34,13 +34,15 @@
   </template>
 <script setup>
   import { useUserStore } from '../../../store/user';
-import { ref,defineProps, reactive } from 'vue';
+import { ref,defineProps, reactive,defineEmits } from 'vue';
 import axios from 'axios';
 
 //   import dayjs from 'dayjs';
 //   import relativeTime from 'dayjs/plugin/relativeTime';
 //   dayjs.extend(relativeTime);
 const props = defineProps({_id:String})
+const emit  = defineEmits(['addCommentData'])
+
 const UserStore = useUserStore();
 
   const submitting = ref(false);
@@ -63,6 +65,14 @@ const UserStore = useUserStore();
     axios.post('api/comment/addOneLevelComment',CommentForm)
                .then(res=>{
                 console.log('res:',res);
+                if(res.data.code==200){
+                  console.log('新增评论成功');
+                  //将新增加的评论用emit push到comment列表中
+                  console.log('新增加的评论:',res.data.data);
+                  emit('addCommentData',res.data.data);
+                }else{
+                  console.log('新增加评论失败:',res.data.body._message);
+                }
                })
                .catch(err=>{
                 console.log('err:',err);

@@ -21,13 +21,13 @@
               <template #title>
                 <a >{{ item.title }}</a>
               </template>
+
               <template #avatar>
                 <a-button type="primary" @click="deleteIssue(item)" danger>删除</a-button>
                 <EditButton :info="item" @commitForm="EditIssue"></EditButton>
-              </template>
-           
-             
+            </template>
             </a-list-item-meta>
+            
           </a-list-item>
 
         </template>
