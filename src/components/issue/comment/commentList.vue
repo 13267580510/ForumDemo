@@ -20,14 +20,14 @@
         
         <div >
           <div>
-            <span @click="showModal" style="cursor: pointer">回复</span>
-            <a-modal v-model:open="open" title="回复" @ok="handleOk">
-              <a-textarea :rows="4" placeholder="这里不是祖安，请友好交流" :maxlength="6" />
+            <span @click="showModal" style="cursor: pointer ">回复</span>
+            <a-modal v-model:open="open"  title="回复" @ok="addReplyTo">
+              <a-textarea  v-model:value="replyContent"   placeholder="这里不是祖安，请友好交流"  />
             </a-modal>
           </div>
         </div>
 
-        <!-- 回复框 -->
+     
         
 
         <!-- 删除按钮 -->
@@ -65,8 +65,8 @@
       </template>
 
       <!-- 二级评论组件 -->
-      
-      <commentChild v-for="item in item.replies"></commentChild>
+      <commentChild v-for="(reply,index) in item.replies" :key=reply._id :reply="reply" :index="index" :item="item"></commentChild>
+
     </a-comment>
   </template>
 <script setup>
@@ -90,12 +90,25 @@ onBeforeMount(()=>{
   console.log('接收到评论列表数据：',CommentDetail);
   })
 
-const handleOk = e => {
-  console.log(e);
+const replyContent = ref('');
+//一级回复
+const addReplyTo = () => {
+  console.log('replyContent:',replyContent.value);
+  const replyForm = reactive({
+    content:replyContent.value,
+    author:UserStore.profile.username,
+    UID:UserStore.profile.UID,
+    replyTo:null,
+  });
   open.value = false;
+  console.log('新增加二级评论表单：',replyForm);
+  axios.post('api/comment/addTw0LevelComment',{CommentDetail,replyForm})
+        
+  replyContent.value = ''
 };
 
 const open = ref(false);
+
 const showModal = () => {
   open.value = true;
 };

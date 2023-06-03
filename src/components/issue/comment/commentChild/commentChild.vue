@@ -1,15 +1,13 @@
 <template>
-  <a-comment>
-    123123
-  </a-comment>
-<!-- <a-comment :item="CommentDetail">
+
+<a-comment :reply="replyDetail">
       <template #actions>
         <span key="comment-basic-like">
           <a-tooltip title="Like">
             <like-outlined />
           </a-tooltip>
           <span style="padding-left: 8px; cursor: auto">
-            {{ item.likes }}
+            {{ reply.likes }}
           </span>
         </span>
         <span key="comment-basic-dislike">
@@ -17,10 +15,17 @@
             <dislike-outlined />
           </a-tooltip>
           <span style="padding-left: 8px; cursor: auto">
-            {{ item.dislikes }}
+            {{ reply.dislikes }}
           </span>
         </span>
-        <span key="comment-basic-reply-to">回复</span>
+        <div >
+          <div>
+            <span @click="showModal" style="cursor: pointer ">回复</span>
+            <a-modal v-model:open="replyOpen"  title="回复" @ok="addReplyTo(reply)">
+              <a-textarea  v-model:value="replyContent"   placeholder="这里不是祖安，请友好交流"  />
+            </a-modal>
+          </div>
+        </div>
         
         <span key="comment-basic-outlined">
      
@@ -30,7 +35,7 @@
               </a>
               <template #overlay>
                   <a-space>
-                    <a-button @click="deleteComment(item)" type="primary" danger  ghost>删除</a-button>
+                    <a-button @click="deleteReply(reply)" type="primary" danger  ghost>删除</a-button>
                   </a-space> 
               </template>
             </a-dropdown>
@@ -39,27 +44,27 @@
         
       </template>
 
-      <template #author><a>{{ item.author }}</a></template>
+      <template #author><a>{{ reply.author }}</a></template>
       <template #avatar>
         <a-avatar src="" alt="头像加载失败" />
       </template>
       <template #content>
         <p>
-         {{ item.content }}
+         {{ reply.content }}
         </p>
       </template>
       <template #datetime>
         <a-tooltip :title="dayjs().format('YYYY-MM-DD HH:mm:ss')">
-          <span>{{ dayjs(dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss')).fromNow() }}</span>
+          <span>{{ dayjs(dayjs(reply.createTime).format('YYYY-MM-DD HH:mm:ss')).fromNow() }}</span>
         </a-tooltip>
       </template>
 
-</a-comment> -->
+</a-comment> 
 </template>
 
 <script setup>
 import {LikeFilled,LikeOutlined,DislikeFilled,DislikeOutlined,MoreOutlined} from '@ant-design/icons-vue'
-import {onBeforeMount,defineProps, reactive,defineEmits} from 'vue'
+import {ref,onBeforeMount,defineProps, reactive,defineEmits} from 'vue'
 import dayjs from "dayjs";
 import axios from 'axios';
 import { useUserStore } from '@/store/user';
@@ -69,8 +74,64 @@ var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime)
 
-const props = defineProps({item:Object});
+const props = defineProps(
+  { reply:Object,
+    index:Number,
+    item:Object
+  });
+const UserStore = useUserStore();
 
-console.log('CommentChild:',props.item);
+// console.log('CommentChild:',props.reply);
+// console.log('index:',props.index);
+// console.log('item:',props.item);
+const replyDetail = reactive(props.reply);
+const replyToIndex = replyDetail.replyToIndex;
+console.log('replyToIndex:',replyToIndex);
+// const replyToObject = props.item.replies[replyDetail.replyToIndex]
 
+
+
+const replyOpen = ref(false);
+const replyContent = ref('');
+const showModal = () => {
+  replyOpen.value = true;
+};
+// 二级回复
+const addReplyTo =async (reply) => {
+  const  _id= props.item._id;
+  const  index=props.index;
+  const twoReplyForm = reactive({
+    content:replyContent.value,
+    author:UserStore.profile.username,
+    UID:UserStore.profile.UID,
+    replyTo:reply._id,
+    replyToIndex:index
+  });
+  axios.post('api/comment/addTwoLevelReply',{_id,index,twoReplyForm});
+  replyOpen.value = false;
+  replyContent.value = ''
+  
+};
+
+
+
+
+const deleteReply = (reply) => {
+  console.log("要删除的reply：",reply);
+   axios.post('api/comment/deleteTwoLevelComment',{
+      UID:UserStore.profile.UID,
+      index:props.index,
+      _id:props.item._id
+   })
+            .then(res=>{
+                console.log('res:',res);
+            })
+}
+onBeforeMount(()=>{
+  // console.log('replyToObject:', replyToObject );
+  if(replyDetail.replyTo){
+    console.log('replyDetail:',replyDetail);
+    replyDetail.content=`@${props.item.replies[replyToIndex].author}     ${ replyDetail.content}`
+  }
+})
 </script>
